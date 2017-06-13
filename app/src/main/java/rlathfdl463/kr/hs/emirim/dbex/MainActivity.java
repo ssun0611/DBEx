@@ -1,6 +1,7 @@
 package rlathfdl463.kr.hs.emirim.dbex;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -41,8 +43,28 @@ public class MainActivity extends AppCompatActivity {
                 sqlDb.close();
             }
         });
-
-
+        but_insert.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sqlDb=myHelper.getWritableDatabase();
+                String sql="insert into idolTable values('"+editName.getText()+"', " +editCount.getText()+")";
+                sqlDb.execSQL(sql);
+                sqlDb.close();
+                Toast.makeText(MainActivity.this, "저장됨",Toast.LENGTH_LONG).show();
+            }
+        });
+        but_select.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sqlDb=myHelper.getReadableDatabase();
+                String sql="select * from idolTable";
+                Cursor cursor=sqlDb.rawQuery(sql,null);
+                String names="Idol 이름"+"\r\n"+"================="+"\r\n";
+                String ncounts="Idol 인원수"+"\r\n"+"================="+"\r\n";
+                while(cursor.moveToNext()) {
+                }
+            }
+        });
     }
 
     class MyDBHelper extends SQLiteOpenHelper{
