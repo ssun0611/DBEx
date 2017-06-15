@@ -13,8 +13,8 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button but_init, but_insert , but_select;
-    EditText edit_result_name,edit_result_count,edit_group_name1,edit_group_name2,edit_group_name;
+    Button but_init, but_insert , but_select,but_editcnt;
+    EditText edit_result_name,edit_result_count,edit_group_name,editName,editCount;
     MyDBHelper myHelper;
     SQLiteDatabase sqlDb;
 
@@ -26,11 +26,12 @@ public class MainActivity extends AppCompatActivity {
         but_init=(Button) findViewById(R.id.but_init);
         but_insert=(Button)findViewById(R.id.but_insert);
         but_select=(Button)findViewById(R.id.but_select);
+        but_editcnt=(Button)findViewById(R.id.but_editcnt);
         edit_result_name=(EditText)findViewById(R.id.edit_result_name);
         edit_result_count=(EditText)findViewById(R.id.edit_result_count);
         edit_group_name=(EditText)findViewById(R.id.edit_group_name);
-        edit_group_name1=(EditText)findViewById(R.id.edit_group_name1);
-        edit_group_name2=(EditText)findViewById(R.id.edit_group_name2);
+        editName=(EditText)findViewById(R.id.edit_group_name);
+        editCount=(EditText)findViewById(R.id.edit_group_count);
 
         //DB 생성
         myHelper=new MyDBHelper(this);
@@ -60,9 +61,22 @@ public class MainActivity extends AppCompatActivity {
                 String sql="select * from idolTable";
                 Cursor cursor=sqlDb.rawQuery(sql,null);
                 String names="Idol 이름"+"\r\n"+"================="+"\r\n";
-                String ncounts="Idol 인원수"+"\r\n"+"================="+"\r\n";
+                String counts="Idol 인원수"+"\r\n"+"================="+"\r\n";
                 while(cursor.moveToNext()) {
+                    names += cursor.getString(0)+"\r\n";
+                    counts+=cursor.getInt(1)+"\r\n";
                 }
+                edit_result_name.setText(names);
+                edit_result_count.setText(counts);
+                cursor.close();
+                sqlDb.close();
+            }
+        });
+        but_editcnt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(names==names)
+
             }
         });
     }
@@ -83,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
         //이미 idolTable이 존재한다면 기존의 테이블을 삭제하고 새로 테이블 만들 때 호출
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            String sql="drop table if exist idolTable";
+            String sql="drop table if exists idolTable";
             db.execSQL(sql);
             onCreate(db);
         }
