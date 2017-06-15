@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button but_init, but_insert , but_select,but_editcnt;
+    Button but_init, but_insert , but_select,but_editcnt,but_del;
     EditText edit_result_name,edit_result_count,edit_group_name,editName,editCount;
     MyDBHelper myHelper;
     SQLiteDatabase sqlDb;
@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
         but_insert=(Button)findViewById(R.id.but_insert);
         but_select=(Button)findViewById(R.id.but_select);
         but_editcnt=(Button)findViewById(R.id.but_editcnt);
+        but_del=(Button)findViewById(R.id.but_del);
         edit_result_name=(EditText)findViewById(R.id.edit_result_name);
         edit_result_count=(EditText)findViewById(R.id.edit_result_count);
         edit_group_name=(EditText)findViewById(R.id.edit_group_name);
@@ -75,8 +76,22 @@ public class MainActivity extends AppCompatActivity {
         but_editcnt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(names==names)
+                sqlDb=myHelper.getWritableDatabase();
+                String sql="update idolTable set idolCount="+editCount.getText()+" where idolName='"+editName.getText()+"'";
+                sqlDb.execSQL(sql);
+                sqlDb.close();
+                Toast.makeText(MainActivity.this, "수정됨",Toast.LENGTH_LONG).show();
+            }
+        });
 
+        but_del.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sqlDb=myHelper.getWritableDatabase();
+                String sql="delete from idolTable"+" where idolName='"+editName.getText()+"'";
+                sqlDb.execSQL(sql);
+                sqlDb.close();
+                Toast.makeText(MainActivity.this, "삭제됨",Toast.LENGTH_LONG).show();
             }
         });
     }
